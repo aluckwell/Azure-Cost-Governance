@@ -1,0 +1,49 @@
+{
+    "properties": {
+      "displayName": "Application Gateway has an empty Backend Pool",
+      "policyType": "Custom",
+      "mode": "Indexed",
+      "description": "Highlights when Application Gateway has an empty Backend Pool",
+      "parameters": {
+        "effect": {
+          "type": "String",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit",
+          "metadata": {
+            "description": "Specify the effect of the policy. Options are Audit, Deny, or Disabled.",
+            "displayName": "Effect"
+          }
+        }
+      },
+      "policyRule": {
+        "if": {
+          "allOf": [
+            {
+              "field": "type",
+              "equals": "Microsoft.Network/applicationGateways"
+            },
+            {
+              "anyOf": [
+                {
+                  "field": "Microsoft.Network/applicationGateways/backendAddressPools[*].backendAddresses",
+                  "exists": "false"
+                },
+                {
+                  "field": "Microsoft.Network/applicationGateways/backendAddressPools[*].backendAddresses",
+                  "count": 0
+                }
+              ]
+            }
+          ]
+        },
+        "then": {
+          "effect": "[parameters('effect')]"
+        }
+      }
+    }
+  }
+  

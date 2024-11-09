@@ -1,0 +1,72 @@
+{
+    "properties": {
+      "displayName": "Sets a maximum size for Application Gateway Auto-Scaling Min and Max Instance counts",
+      "policyType": "Custom",
+      "mode": "Indexed",
+      "description": "Sets a maximum number of Instances for Application Gateway Auto-Scaling. Works for min and max instance counts",
+      "parameters": {
+        "effect": {
+          "type": "String",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit",
+          "metadata": {
+            "description": "Specify the effect of the policy. Options are Audit, Deny, or Disabled.",
+            "displayName": "Effect"
+          }
+        },
+        "minInstanceThreshold": {
+          "type": "Integer",
+          "defaultValue": 1,
+          "metadata": {
+            "description": "Minimum instance count threshold for auto-scaling. If the minimum instances exceed this value, the policy will flag the App Gateway.",
+            "displayName": "Minimum Instance Count Threshold"
+          }
+        },
+        "maxInstanceThreshold": {
+          "type": "Integer",
+          "defaultValue": 2,
+          "metadata": {
+            "description": "Maximum instance count threshold for auto-scaling. If the maximum instances exceed this value, the policy will flag the App Gateway.",
+            "displayName": "Maximum Instance Count Threshold"
+          }
+        }
+      },
+      "policyRule": {
+        "if": {
+          "allOf": [
+            {
+              "field": "type",
+              "equals": "Microsoft.Network/applicationGateways"
+            },
+            {
+              "field": "Microsoft.Network/applicationGateways/sku.name",
+              "in": [
+                "Standard_v2",
+                "WAF_v2"
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "field": "Microsoft.Network/applicationGateways/autoscaleConfiguration.minCapacity",
+                  "greater": "[parameters('minInstanceThreshold')]"
+                },
+                {
+                  "field": "Microsoft.Network/applicationGateways/autoscaleConfiguration.maxCapacity",
+                  "greater": "[parameters('maxInstanceThreshold')]"
+                }
+              ]
+            }
+          ]
+        },
+        "then": {
+          "effect": "[parameters('effect')]"
+        }
+      }
+    }
+  }
+  

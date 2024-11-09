@@ -1,0 +1,48 @@
+{
+    "properties": {
+      "displayName": "Allowed number of Bastion Hosts",
+      "policyType": "Custom",
+      "mode": "All",
+      "description": "This policy limits the number of Azure Bastions deployed within a specified scope.",
+      "parameters": {
+        "effect": {
+          "type": "String",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit",
+          "metadata": {
+            "description": "Specify the effect of the policy. Options are Audit, Deny, or Disabled.",
+            "displayName": "Effect"
+          }
+        },
+        "maximumAllowedBastions": {
+          "type": "Integer",
+          "defaultValue": 0,
+          "metadata": {
+            "description": "The maximum allowed number of Azure Bastion resources in the hub-and-spoke network.",
+            "displayName": "Maximum Allowed Bastions"
+          }
+        }
+      },
+      "policyRule": {
+        "if": {
+          "allOf": [
+            {
+              "count": {
+                "field": "type",
+                "equals": "Microsoft.Network/bastionHosts"
+              },
+              "greaterThan": "[parameters('maximumAllowedBastions')]"
+            }
+          ]
+        },
+        "then": {
+          "effect": "[parameters('effect')]"
+        }
+      }
+    }
+  }
+  

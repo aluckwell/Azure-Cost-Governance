@@ -1,0 +1,56 @@
+{
+    "properties": {
+      "displayName": "Allowed Application Gateway SKUs",
+      "policyType": "Custom",
+      "mode": "Indexed",
+      "description": "This policy sets the allowed Application Gateway SKUs within the assigned scope.",
+      "parameters": {
+        "effect": {
+          "type": "String",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit",
+          "metadata": {
+            "description": "Specify the effect of the policy. Options are Audit, Deny, or Disabled.",
+            "displayName": "Effect"
+          }
+        },
+        "skuList": {
+          "type": "Array",
+          "allowedValues": [
+            "Basic",
+            "Standard_v2",
+            "WAF_v2"
+          ],
+          "defaultValue": [
+            "Basic"
+          ],
+          "metadata": {
+            "description": "Specify the SKU(s) that the policy should exclude.",
+            "displayName": "SKU List"
+          }
+        }
+      },
+      "policyRule": {
+        "if": {
+          "allOf": [
+            {
+              "field": "type",
+              "equals": "Microsoft.Network/applicationGateways"
+            },
+            {
+              "field": "Microsoft.Network/applicationGateways/sku.name",
+              "notIn": "[parameters('skuList')]"
+            }
+          ]
+        },
+        "then": {
+          "effect": "[parameters('effect')]"
+        }
+      }
+    }
+  }
+  

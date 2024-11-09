@@ -1,27 +1,26 @@
 {
     "properties": {
-        "displayName": "Allowed Disk SKUs for environment",
+        "displayName": "Allowed Recovery Services Vault Redundancy Tiers",
         "policyType": "Custom",
         "mode": "Indexed",
-        "description": "Sets which disk SKUs are permitted in the environment",
+        "description": "Sets the allowed Recovery Services Vault Redundancy Tiers within the assigned scope.",
         "metadata": {
             "category": "Azure Cost Comply"
         },
         "parameters": {
-            "AllowedDiskSKUs": {
+            "RecoveryServicesRedundancy": {
                 "type": "Array",
                 "metadata": {
-                    "displayName": "Allowed Disk SKUs",
-                    "description": "Allowed Disk SKUs"
+                    "displayName": "Allowed Recovery Services Redundancy",
+                    "description": "Recovery Services Vault Redundancy requirement"
                 },
                 "allowedValues": [
-                    "Standard_LRS",
-                    "StandardSSD_LRS",
-                    "Premium_LRS",
-                    "PremiumV2_LRS",
-                    "UltraSSD_LRS",
-                    "StandardSSD_ZRS",
-                    "Premium_ZRS"
+                    "LocallyRedundant",
+                    "ZoneRedundant",
+                    "GeoRedundant"
+                ],
+                "defaultvalue": [
+                    "LocallyRedundant"
                 ]
             },
             "effect": {
@@ -43,11 +42,11 @@
                 "allOf": [
                     {
                         "field": "type",
-                        "equals": "Microsoft.Compute/disks"
+                        "equals": "Microsoft.RecoveryServices/Vaults"
                     },
                     {
-                        "field": "Microsoft.Compute/disks/sku.name",
-                        "notIn": "[parameters('AllowedDiskSKUs')]"
+                        "field": "Microsoft.RecoveryServices/vaults/redundancySettings.standardTierStorageRedundancy",
+                        "notIn": "[parameters('RecoveryServicesRedundancy')]"
                     }
                 ]
             },
