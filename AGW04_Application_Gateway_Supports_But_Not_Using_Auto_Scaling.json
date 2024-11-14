@@ -1,0 +1,47 @@
+{
+    "properties": {
+      "displayName": "Application Gateway supports but not using Auto-Scaling",
+      "policyType": "Custom",
+      "mode": "Indexed",
+      "description": "Highlights when Application Gateway supports Auto-Scaling, but doesn't have it enabled. Application Gateway Auto-scaling should be used to keep costs down during quieter times.",
+      "parameters": {
+        "effect": {
+          "type": "String",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit",
+          "metadata": {
+            "description": "Specify the effect of the policy. Options are Audit, Deny, or Disabled.",
+            "displayName": "Effect"
+          }
+        }
+      },
+      "policyRule": {
+        "if": {
+          "allOf": [
+            {
+              "field": "type",
+              "equals": "Microsoft.Network/applicationGateways"
+            },
+            {
+              "field": "Microsoft.Network/applicationGateways/sku.name",
+              "in": [
+                "Standard_v2",
+                "WAF_v2"
+              ]
+            },
+            {
+              "field": "Microsoft.Network/applicationGateways/sku.capacity",
+              "exists": "true"
+            }
+          ]
+        },
+        "then": {
+          "effect": "[parameters('effect')]"
+        }
+      }
+    }
+  }

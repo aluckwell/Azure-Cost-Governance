@@ -3,7 +3,7 @@
         "displayName": "Allowed Disk SKUs for environment",
         "policyType": "Custom",
         "mode": "Indexed",
-        "description": "Sets which disk SKUs are permitted in the environment",
+        "description": "Sets which disk SKUs are permitted within the assigned scope.",
         "metadata": {
             "category": "Azure Cost Comply"
         },
