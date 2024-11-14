@@ -1,9 +1,9 @@
 {
     "properties": {
-      "displayName": "Allowed Application Gateway SKUs",
+      "displayName": "Allowed Application Gateway Tiers",
       "policyType": "Custom",
       "mode": "Indexed",
-      "description": "This policy sets the allowed Application Gateway SKUs within the assigned scope.",
+      "description": "This policy defines the allowed Application Gateway Tiers within the assigned scope.",
       "parameters": {
         "effect": {
           "type": "String",
@@ -29,7 +29,7 @@
             "Basic"
           ],
           "metadata": {
-            "description": "Specify the SKU(s) that the policy should exclude.",
+            "description": "Specify the allowed Application Gateway Tiers",
             "displayName": "SKU List"
           }
         }
@@ -53,4 +53,3 @@
       }
     }
   }
-  

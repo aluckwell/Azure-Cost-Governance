@@ -1,9 +1,9 @@
 {
     "properties": {
-      "displayName": "Sets a maximum size for Application Gateway Auto-Scaling Min and Max Instance counts",
+      "displayName": "Set the maximum Application Gateway Auto-Scaling Instance counts",
       "policyType": "Custom",
       "mode": "Indexed",
-      "description": "Sets a maximum number of Instances for Application Gateway Auto-Scaling. Works for min and max instance counts",
+      "description": "Sets the maximum number of permitted Instances for Application Gateway Auto-Scaling. Works for min and max instance counts",
       "parameters": {
         "effect": {
           "type": "String",
@@ -50,7 +50,7 @@
               ]
             },
             {
-              "allOf": [
+              "anyOf": [
                 {
                   "field": "Microsoft.Network/applicationGateways/autoscaleConfiguration.minCapacity",
                   "greater": "[parameters('minInstanceThreshold')]"
@@ -69,4 +69,3 @@
       }
     }
   }
-  
