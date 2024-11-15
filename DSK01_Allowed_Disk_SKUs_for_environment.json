@@ -1,11 +1,28 @@
 {
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "name": "DSK01_Allowed_Disk_SKUs_for_environment",
+    "mode": "All",
     "properties": {
-        "displayName": "Allowed Disk SKUs for environment",
-        "policyType": "Custom",
-        "mode": "Indexed",
         "description": "Sets which disk SKUs are permitted within the assigned scope.",
         "metadata": {
-            "category": "Azure Cost Comply"
+            "category": "Cost Comply"
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Compute/disks"
+                    },
+                    {
+                        "field": "Microsoft.Compute/disks/sku.name",
+                        "notIn": "[parameters('AllowedDiskSKUs')]"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
         },
         "parameters": {
             "AllowedDiskSKUs": {
@@ -36,23 +53,6 @@
                     "Disabled"
                 ],
                 "defaultValue": "Audit"
-            }
-        },
-        "policyRule": {
-            "if": {
-                "allOf": [
-                    {
-                        "field": "type",
-                        "equals": "Microsoft.Compute/disks"
-                    },
-                    {
-                        "field": "Microsoft.Compute/disks/sku.name",
-                        "notIn": "[parameters('AllowedDiskSKUs')]"
-                    }
-                ]
-            },
-            "then": {
-                "effect": "[parameters('effect')]"
             }
         }
     }

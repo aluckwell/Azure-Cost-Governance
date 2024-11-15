@@ -1,11 +1,28 @@
 {
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "name": "DSK02_Max_Disk_Size_for_Environment",
+    "mode": "All",
     "properties": {
-        "displayName": "Max Disk Size for Environment",
-        "policyType": "Custom",
-        "mode": "Indexed",
-        "description": "Sets a Maximum permitted Disk size for the environment",
+        "description": "Sets a Maximum permitted Disk size for the environment.",
         "metadata": {
-            "category": "Azure Cost Comply"
+            "category": "Cost Comply"
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Compute/disks"
+                    },
+                    {
+                        "field": "Microsoft.Compute/disks/diskSizeGB",
+                        "greater": "[parameters('MaxDiskSize')]"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
         },
         "parameters": {
             "MaxDiskSize": {
@@ -28,23 +45,6 @@
                     "Disabled"
                 ],
                 "defaultValue": "Audit"
-            }
-        },
-        "policyRule": {
-            "if": {
-                "allOf": [
-                    {
-                        "field": "type",
-                        "equals": "Microsoft.Compute/disks"
-                    },
-                    {
-                        "field": "Microsoft.Compute/disks/diskSizeGB",
-                        "greater": "[parameters('MaxDiskSize')]"
-                    }
-                ]
-            },
-            "then": {
-                "effect": "[parameters('effect')]"
             }
         }
     }
