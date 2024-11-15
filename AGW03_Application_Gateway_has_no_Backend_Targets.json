@@ -1,0 +1,47 @@
+{
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "name": "AGW03_Application_Gateway_has_no_Backend_Targets",
+    "mode": "All",
+    "properties": {
+        "description": "Highlights when an Application Gateway has no backend targets, indicating isn't used and can likely be deleted",
+        "metadata": {
+            "category": "Cost Comply"
+        },
+        "policyRule": {
+            "if": {
+              "allOf": [
+                {
+                  "field": "type",
+                  "equals": "Microsoft.Network/applicationGateways"
+                },
+                {
+                  "field": "Microsoft.Network/applicationGateways/backendAddressPools[*].backendAddresses[*]",
+                  "exists": "false"
+                },
+                {
+                  "field": "Microsoft.Network/applicationGateways/backendAddressPools[*].backendIPConfigurations[*]",
+                  "exists": "false"
+                }
+              ]
+            },
+            "then": {
+              "effect": "[parameters('effect')]"
+            }
+          },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+                    "description": "Specify the effect of the policy. Options are Audit, Deny, or Disabled.",
+                    "displayName": "Effect"
+                }
+            }
+        }
+    }
+}

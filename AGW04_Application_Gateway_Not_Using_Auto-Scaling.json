@@ -1,0 +1,50 @@
+{
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "name": "AGW04_Application_Gateway_Not_Using_Auto-Scaling",
+    "mode": "All",
+    "properties": {
+        "description": "Highlights when Application Gateway supports Auto-Scaling, but doesn't have it enabled. Application Gateway Auto-scaling should be used to keep costs down during quieter times.",
+        "metadata": {
+            "category": "Cost Comply"
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Network/applicationGateways"
+                    },
+                    {
+                        "field": "Microsoft.Network/applicationGateways/sku.name",
+                        "in": [
+                            "Standard_v2",
+                            "WAF_v2"
+                        ]
+                    },
+                    {
+                        "field": "Microsoft.Network/applicationGateways/sku.capacity",
+                        "exists": "true"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+                    "description": "Specify the effect of the policy. Options are Audit, Deny, or Disabled.",
+                    "displayName": "Effect"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,47 @@
+{
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "name": "AGW02_Application_Gateway_WAF_State_Disabled",
+    "mode": "All",
+    "properties": {
+        "description": "Highlights when an Application Gateway is Tiered for WAF but the WAF is disabled, which is wasted costs.",
+        "metadata": {
+            "category": "Cost Comply"
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Network/applicationGatewayWebApplicationFirewallPolicies"
+                    },
+                    {
+                        "field": "Microsoft.Network/applicationGatewayWebApplicationFirewallPolicies/policySettings.state",
+                        "equals": "Disabled"
+                    },
+                    {
+                        "field": "Microsoft.Network/applicationGatewayWebApplicationFirewallPolicies/applicationGateways[*].id",
+                        "exists": "true"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        },
+        "parameters": {
+            "effect": {
+              "type": "String",
+              "allowedValues": [
+                "Audit",
+                "Deny",
+                "Disabled"
+              ],
+              "defaultValue": "Audit",
+              "metadata": {
+                "description": "Specify the effect of the policy. Options are Audit, Deny, or Disabled.",
+                "displayName": "Effect"
+              }
+            }
+          }
+    }
+}
