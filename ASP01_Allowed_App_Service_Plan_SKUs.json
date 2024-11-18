@@ -1,0 +1,87 @@
+{
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "name": "ASP01_Allowed_App_Service_Plan_SKUs",
+    "mode": "All",
+    "properties": {
+        "description": "Sets which App Service Plans are permitted within the assigned scope. Includes SKUs for Web Apps, Functions and Logic Apps. Excludes any legacy SKUs",
+        "metadata": {
+            "category": "Cost Comply"
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Web/serverfarms"
+                    },
+                    {
+                        "not": {
+                            "field": "Microsoft.Web/serverfarms/sku.name",
+                            "in": "[parameters('allowedSkus')]"
+                        }
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        },
+        "parameters": {
+            "allowedSkus": {
+                "type": "Array",
+                "defaultValue": [
+                    "F1",
+                    "D1",
+                    "Y1",
+                    "B1"
+                ],
+                "allowedValues": [
+                    "F1",
+                    "D1",
+                    "B1",
+                    "B2",
+                    "B3",
+                    "P0v3",
+                    "P1v3",
+                    "P2v3",
+                    "P3v3",
+                    "P4v3",
+                    "P1mv3",
+                    "P2mv3",
+                    "P3mv3",
+                    "P4mv3",
+                    "P5mv3",
+                    "I1v2",
+                    "I2v2",
+                    "I3v2",
+                    "Y1",
+                    "FC1",
+                    "EP1",
+                    "EP2",
+                    "EP3",
+                    "WS1",
+                    "WS2",
+                    "WS3"
+
+                ],
+                "metadata": {
+                    "description": "The list of allowed App Service Plan SKUs.",
+                    "displayName": "Allowed App Service Plan SKUs"
+                }
+            },
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "This parameter lets you choose the effect of the policy. If you choose Audit (default), the policy will only audit resources for compliance. If you choose Deny, the policy will deny the creation of non-compliant resources. If you choose Disabled, the policy will not enforce compliance (useful, for example, as a second assignment to ignore a subset of non-compliant resources in a single resource group)."
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            }
+        }
+    }
+}
