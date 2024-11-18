@@ -1,0 +1,58 @@
+{
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "name": "BAS02_Maximum_Bastion_Instance_Count",
+    "mode": "All",
+    "properties": {
+        "description": "Sets the maximum Instance Count (Scale Units) for Azure Bastions. Standard and Premium Bastions support additional Instances beyond 2. Limit Instance count to avoid excessive costs",
+        "metadata": {
+            "category": "Cost Comply"
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Network/bastionHosts"
+                    },
+                    {
+                        "field": "Microsoft.Network/bastionHosts/sku.name",
+                        "in": [
+                            "Standard",
+                            "Premium"
+                        ]
+                    },
+                    {
+                        "field": "Microsoft.Network/bastionHosts/scaleUnits",
+                        "greater": "[parameters('MaxInstanceCount')]"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+                    "description": "Specify the effect of the policy. Options are Audit, Deny, or Disabled.",
+                    "displayName": "Effect"
+                }
+            },
+            "MaxInstanceCount": {
+                "type": "integer",
+                "metadata": {
+                    "displayName": "Max permitted Bastion Instance count",
+                    "description": "The maximum number of instances permitted on the Azure Bastion"
+                },
+                "defaultValue": 2
+            }
+        }
+    }
+}
