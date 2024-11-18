@@ -1,0 +1,59 @@
+{
+  "type": "Microsoft.Authorization/policyDefinitions",
+  "name": "BAS01_Allowed_Azure_Bastion_SKUs",
+  "mode": "All",
+  "properties": {
+      "description": "Sets which Azure Bastion SKUs are permitted within the assigned scope.",
+      "metadata": {
+          "category": "Cost Comply"
+      },
+      "policyRule": {
+        "if": {
+          "allOf": [
+            {
+              "field": "type",
+              "equals": "Microsoft.Network/bastionHosts"
+            },
+            {
+              "field": "Microsoft.Network/bastionHosts/sku.name",
+              "notIn": "[parameters('allowedSkus')]"
+            }
+          ]
+        },
+        "then": {
+          "effect": "[parameters('effect')]"
+        }
+      },
+      "parameters": {
+        "effect": {
+          "type": "String",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit",
+          "metadata": {
+            "description": "Specify the effect of the policy. Options are Audit, Deny, or Disabled.",
+            "displayName": "Effect"
+          }
+        },
+        "allowedSkus": {
+          "type": "Array",
+          "defaultValue": [
+            "Developer"
+          ],
+          "allowedValues": [
+            "Basic",
+            "Standard",
+            "Developer",
+            "Premium"
+          ],
+          "metadata": {
+            "description": "List of allowed Azure Bastion SKUs.",
+            "displayName": "Allowed Bastion SKUs"
+          }
+        }
+      }
+  }
+}
