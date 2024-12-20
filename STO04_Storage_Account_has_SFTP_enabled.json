@@ -1,9 +1,9 @@
 {
     "type": "Microsoft.Authorization/policyDefinitions",
-    "name": "AGW01_Allowed_Application_Gateway_Tiers",
+    "name": "STO04_Storage_Account_has_SFTP_enabled",
     "mode": "All",
     "properties": {
-        "description": "This policy defines the allowed Application Gateway Tiers within the assigned scope.",
+        "description": "Highlights Storage Accounts with SFTP Enabled. SFTP has a flat monthly cost over $200",
         "metadata": {
             "category": "Cost Comply"
         },
@@ -12,11 +12,11 @@
                 "allOf": [
                     {
                         "field": "type",
-                        "equals": "Microsoft.Network/applicationGateways"
+                        "equals": "Microsoft.Storage/storageAccounts"
                     },
                     {
-                        "field": "Microsoft.Network/applicationGateways/sku.name",
-                        "notIn": "[parameters('AllowedAppGatewaySKUs')]"
+                        "field": "Microsoft.Storage/storageAccounts/isSftpEnabled",
+                        "equals": "true"
                     }
                 ]
             },
@@ -36,21 +36,6 @@
                 "metadata": {
                     "description": "Specify the effect of the policy. Options are Audit, Deny, or Disabled.",
                     "displayName": "Effect"
-                }
-            },
-            "AllowedAppGatewaySKUs": {
-                "type": "Array",
-                "allowedValues": [
-                    "Basic",
-                    "Standard_v2",
-                    "WAF_v2"
-                ],
-                "defaultValue": [
-                    "Basic"
-                ],
-                "metadata": {
-                    "description": "Specify the allowed Application Gateway Tiers",
-                    "displayName": "Application Gateway: Allowed SKUs"
                 }
             }
         }

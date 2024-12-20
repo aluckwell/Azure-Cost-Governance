@@ -28,7 +28,7 @@
             "RecoveryServicesRedundancy": {
                 "type": "Array",
                 "metadata": {
-                    "displayName": "Allowed Recovery Services Redundancy",
+                    "displayName": "Recovery Services Vault: Allowed Redundancy Tiers",
                     "description": "Recovery Services Vault Redundancy requirement"
                 },
                 "allowedValues": [

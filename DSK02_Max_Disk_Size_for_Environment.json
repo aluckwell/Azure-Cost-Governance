@@ -28,7 +28,7 @@
             "MaxDiskSize": {
                 "type": "integer",
                 "metadata": {
-                    "displayName": "Max permitted disk size",
+                    "displayName": "Disk: Max permitted size",
                     "description": "The maximum permitted disk size for this environment"
                 },
                 "defaultValue": 256

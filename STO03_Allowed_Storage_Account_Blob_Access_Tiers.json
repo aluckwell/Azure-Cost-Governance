@@ -1,9 +1,9 @@
 {
     "type": "Microsoft.Authorization/policyDefinitions",
-    "name": "BAS02_Maximum_Bastion_Instance_Count",
+    "name": "STO03_Allowed_Storage_Account_Blob_Access_Tiers",
     "mode": "All",
     "properties": {
-        "description": "Sets the maximum Instance Count (Scale Units) for Azure Bastions. Standard and Premium Bastions support additional Instances beyond 2. Limit Instance count to avoid excessive costs",
+        "description": "This policy defines the allowed Storage Account Access Tiers within the assigned scope.",
         "metadata": {
             "category": "Cost Comply"
         },
@@ -12,18 +12,11 @@
                 "allOf": [
                     {
                         "field": "type",
-                        "equals": "Microsoft.Network/bastionHosts"
+                        "equals": "Microsoft.Storage/storageAccounts"
                     },
                     {
-                        "field": "Microsoft.Network/bastionHosts/sku.name",
-                        "in": [
-                            "Standard",
-                            "Premium"
-                        ]
-                    },
-                    {
-                        "field": "Microsoft.Network/bastionHosts/scaleUnits",
-                        "greater": "[parameters('MaxInstanceCount')]"
+                        "field": "Microsoft.Storage/storageAccounts/accessTier",
+                        "notIn": "[parameters('AllowedStorageAccountAccessTiers')]"
                     }
                 ]
             },
@@ -45,13 +38,20 @@
                     "displayName": "Effect"
                 }
             },
-            "MaxInstanceCount": {
-                "type": "integer",
+            "AllowedStorageAccountAccessTiers": {
+                "type": "Array",
+                "allowedValues": [
+                    "Hot",
+                    "Cool",
+                    "Cold"
+                ],
+                "defaultValue": [
+                    "Hot"
+                ],
                 "metadata": {
-                    "displayName": "Bastion: Max Permitted Instance count",
-                    "description": "The maximum number of instances permitted on the Azure Bastion"
-                },
-                "defaultValue": 2
+                    "description": "Specify the allowed Storage Account Access Tiers",
+                    "displayName": "Storage Account: Allowed Access Tiers"
+                }
             }
         }
     }
