@@ -1,0 +1,43 @@
+{
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "name": "FW04_Firewall_Policy_Analytics_Is_Enabled",
+    "mode": "All",
+    "properties": {
+        "description": "This policy highlights when a Firewall Policy has Policy Analytics enabled. Policy Analytics costs £199 per month, and should be avoided if not required",
+        "metadata": {
+            "category": "Cost Comply"
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Network/firewallPolicies"
+                    },
+                    {
+                        "field": "Microsoft.Network/firewallPolicies/insights.isEnabled",
+                        "equals": "true"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+                    "description": "Specify the effect of the policy. Options are Audit, Deny, or Disabled.",
+                    "displayName": "Effect"
+                }
+            }
+        }
+    }
+}
