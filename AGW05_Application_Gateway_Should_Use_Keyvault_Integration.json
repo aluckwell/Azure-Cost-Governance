@@ -1,0 +1,49 @@
+{
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "name": "AGW05_Application_Gateway_Should_Use_Keyvault_Integration",
+    "mode": "All",
+    "properties": {
+        "description": "Highlights when an Application Gateway has a locally installed certificate, which should instead be stored in Key vault",
+        "metadata": {
+            "category": "Cost Comply"
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                  {
+                    "field": "type",
+                    "equals": "Microsoft.Network/applicationGateways"
+                  },
+                  {
+                    "count": {
+                      "field": "Microsoft.Network/applicationGateways/sslCertificates[*]",
+                      "where": {
+                        "field": "Microsoft.Network/applicationGateways/sslCertificates[*].publicCertData",
+                        "exists": true
+                      }
+                    },
+                    "greater": 0
+                  }
+                ]
+              },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        },
+        "parameters": {
+            "effect": {
+              "type": "String",
+              "allowedValues": [
+                "Audit",
+                "Deny",
+                "Disabled"
+              ],
+              "defaultValue": "Audit",
+              "metadata": {
+                "description": "Specify the effect of the policy. Options are Audit, Deny, or Disabled.",
+                "displayName": "Effect"
+              }
+            }
+          }
+    }
+}

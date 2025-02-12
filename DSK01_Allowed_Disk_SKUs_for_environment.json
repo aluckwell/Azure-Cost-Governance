@@ -28,9 +28,12 @@
             "AllowedDiskSKUs": {
                 "type": "Array",
                 "metadata": {
-                    "displayName": "Allowed Disk SKUs",
-                    "description": "Allowed Disk SKUs"
+                    "displayName": "Disk: Allowed SKUs",
+                    "description": "The list of allowed Disk SKUs"
                 },
+                "defaultValue": [
+                    "Standard_LRS"
+                ],
                 "allowedValues": [
                     "Standard_LRS",
                     "StandardSSD_LRS",

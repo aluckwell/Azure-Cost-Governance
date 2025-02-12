@@ -25,11 +25,11 @@
                         "anyOf": [
                             {
                                 "field": "Microsoft.Network/applicationGateways/autoscaleConfiguration.minCapacity",
-                                "greater": "[parameters('minInstanceThreshold')]"
+                                "greater": "[parameters('AppGatewayMinInstanceThreshold')]"
                             },
                             {
                                 "field": "Microsoft.Network/applicationGateways/autoscaleConfiguration.maxCapacity",
-                                "greater": "[parameters('maxInstanceThreshold')]"
+                                "greater": "[parameters('AppGatewayMaxInstanceThreshold')]"
                             }
                         ]
                     }
@@ -53,20 +53,20 @@
                     "displayName": "Effect"
                 }
             },
-            "minInstanceThreshold": {
+            "AppGatewayMinInstanceThreshold": {
                 "type": "Integer",
                 "defaultValue": 1,
                 "metadata": {
-                    "description": "Minimum instance count threshold for auto-scaling. If the minimum instances exceed this value, the policy will flag the App Gateway.",
-                    "displayName": "Minimum Instance Count Threshold"
+                    "description": "Minimum Application Gateway instance count threshold for auto-scaling. If the minimum instances exceed this value, the policy will flag the App Gateway.",
+                    "displayName": "Application Gateway: Minimum Instance Count Threshold"
                 }
             },
-            "maxInstanceThreshold": {
+            "AppGatewayMaxInstanceThreshold": {
                 "type": "Integer",
                 "defaultValue": 2,
                 "metadata": {
-                    "description": "Maximum instance count threshold for auto-scaling. If the maximum instances exceed this value, the policy will flag the App Gateway.",
-                    "displayName": "Maximum Instance Count Threshold"
+                    "description": "Maximum Application Gateway instance count threshold for auto-scaling. If the maximum instances exceed this value, the policy will flag the App Gateway.",
+                    "displayName": "Application Gateway: Maximum Instance Count Threshold"
                 }
             }
         }

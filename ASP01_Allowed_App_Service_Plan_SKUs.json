@@ -3,7 +3,7 @@
     "name": "ASP01_Allowed_App_Service_Plan_SKUs",
     "mode": "All",
     "properties": {
-        "description": "Sets which App Service Plans are permitted within the assigned scope. Includes SKUs for Web Apps, Functions and Logic Apps. Excludes any legacy SKUs",
+        "description": "Sets which App Service Plans are permitted within the assigned scope. Includes plan for Web Apps, Functions and Logic Apps. Excludes any legacy SKUs",
         "metadata": {
             "category": "Cost Comply"
         },
@@ -17,7 +17,7 @@
                     {
                         "not": {
                             "field": "Microsoft.Web/serverfarms/sku.name",
-                            "in": "[parameters('allowedSkus')]"
+                            "in": "[parameters('allowedAppServicePlanSkus')]"
                         }
                     }
                 ]
@@ -27,7 +27,7 @@
             }
         },
         "parameters": {
-            "allowedSkus": {
+            "allowedAppServicePlanSkus": {
                 "type": "Array",
                 "defaultValue": [
                     "F1",
@@ -66,7 +66,7 @@
                 ],
                 "metadata": {
                     "description": "The list of allowed App Service Plan SKUs.",
-                    "displayName": "Allowed App Service Plan SKUs"
+                    "displayName": "App Service Plan: Allowed SKUs"
                 }
             },
             "effect": {

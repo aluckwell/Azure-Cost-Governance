@@ -16,7 +16,7 @@
             },
             {
               "field": "Microsoft.Network/bastionHosts/sku.name",
-              "notIn": "[parameters('allowedSkus')]"
+              "notIn": "[parameters('allowedBastionSkus')]"
             }
           ]
         },
@@ -38,7 +38,7 @@
             "displayName": "Effect"
           }
         },
-        "allowedSkus": {
+        "allowedBastionSkus": {
           "type": "Array",
           "defaultValue": [
             "Developer"
@@ -51,7 +51,7 @@
           ],
           "metadata": {
             "description": "List of allowed Azure Bastion SKUs.",
-            "displayName": "Allowed Bastion SKUs"
+            "displayName": "Bastion: Allowed SKUs"
           }
         }
       }
