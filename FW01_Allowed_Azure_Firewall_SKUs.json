@@ -1,0 +1,58 @@
+{
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "name": "FW01_Allowed_Azure_Firewall_SKUs",
+    "mode": "All",
+    "properties": {
+        "description": "This policy defines the allowed Azure Firewall SKUs for the assigned scope",
+        "metadata": {
+            "category": "Cost Comply"
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Network/azureFirewalls"
+                    },
+                    {
+                        "field": "Microsoft.Network/azureFirewalls/sku.tier",
+                        "notIn": "[parameters('AllowedFirewallSKUs')]"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+                    "description": "Specify the effect of the policy. Options are Audit, Deny, or Disabled.",
+                    "displayName": "Effect"
+                }
+            },
+            "AllowedFirewallSKUs": {
+                "type": "Array",
+                "allowedValues": [
+                    "Basic",
+                    "Standard",
+                    "Premium"
+                ],
+                "defaultValue": [
+                    "Basic"
+                ],
+                "metadata": {
+                    "description": "Specify the allowed Firewall Redundancy Tiers",
+                    "displayName": "Firewall: Allowed SKUs"
+                }
+            }
+        }
+    }
+}

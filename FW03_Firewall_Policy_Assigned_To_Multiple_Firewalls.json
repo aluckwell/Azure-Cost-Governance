@@ -1,0 +1,49 @@
+{
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "name": "FW03_Firewall_Policy_Assigned_To_Multiple_Firewalls",
+    "mode": "All",
+    "properties": {
+        "description": "This policy highlights when a Firewall Policy is assigned to multiple Firewalls. Firewall Policies assigned to more than 1 Firewall incur costs",
+        "metadata": {
+            "category": "Cost Comply"
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Network/firewallPolicies"
+                    },
+                    {
+                        "count": {
+                          "field": "Microsoft.Network/firewallPolicies/firewalls[*]",
+                          "where": {
+                            "field": "Microsoft.Network/firewallPolicies/firewalls[*].id",
+                            "exists": true
+                          }
+                        },
+                        "greater": 1
+                      }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+                    "description": "Specify the effect of the policy. Options are Audit, Deny, or Disabled.",
+                    "displayName": "Effect"
+                }
+            }
+        }
+    }
+}

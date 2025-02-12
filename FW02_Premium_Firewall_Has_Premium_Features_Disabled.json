@@ -1,0 +1,61 @@
+{
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "name": "FW02_Premium_Firewall_Has_Premium_Features_Disabled",
+    "mode": "All",
+    "properties": {
+        "description": "This policy highlights when a Premium Azure Firewall doesn't have Premium Features Enabled",
+        "metadata": {
+            "category": "Cost Comply"
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Network/firewallPolicies"
+                    },
+                    {
+                        "field": "Microsoft.Network/firewallPolicies/sku.tier",
+                        "equals": "Premium"
+                    },
+                    {
+                        "count": {
+                            "field": "Microsoft.Network/firewallPolicies/firewalls[*]"
+                        },
+                        "greater": 0
+                    },
+                    {
+                        "anyOf": [
+                            {
+                                "field": "Microsoft.Network/firewallPolicies/intrusionDetection.mode",
+                                "equals": "Off"
+                            },
+                            {
+                                "field": "Microsoft.Network/firewallPolicies/transportSecurity",
+                                "exists": "false"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+                    "description": "Specify the effect of the policy. Options are Audit, Deny, or Disabled.",
+                    "displayName": "Effect"
+                }
+            }
+        }
+    }
+}
