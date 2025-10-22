@@ -1,6 +1,6 @@
 {
     "type": "Microsoft.Authorization/policyDefinitions",
-    "name": "AGW06_Maximum_Application_Gateway_Auto_Scaling_Instances",
+    "name": "AGW05_Application_Gateway_Max_Auto_Scaling_Instances",
     "mode": "All",
     "properties": {
         "description": "Sets the maximum number of permitted Instances for Application Gateway Auto-Scaling. Works for minimum and maximum instance counts.",
