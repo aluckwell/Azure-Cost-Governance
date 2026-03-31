@@ -1,6 +1,6 @@
 {
     "type": "Microsoft.Authorization/policyDefinitions",
-    "name": "AGW05_Application_Gateway_Should_Use_Keyvault_Integration",
+    "name": "AGW06_Application_Gateway_Should_Use_Keyvault_Integration",
     "mode": "All",
     "properties": {
         "description": "Highlights when an Application Gateway has a locally installed certificate, which should instead be stored in Key vault",

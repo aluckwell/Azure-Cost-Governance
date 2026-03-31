@@ -1,9 +1,9 @@
 {
     "type": "Microsoft.Authorization/policyDefinitions",
-    "name": "AGW01_Allowed_Application_Gateway_Tiers",
+    "name": "SKUs",
     "mode": "All",
     "properties": {
-        "description": "This policy defines the allowed Application Gateway Tiers within the assigned scope.",
+        "description": "This policy defines the allowed Application Gateway SKUs within the assigned scope.",
         "metadata": {
             "category": "Cost Comply"
         },
@@ -49,7 +49,7 @@
                     "Basic"
                 ],
                 "metadata": {
-                    "description": "Specify the allowed Application Gateway Tiers",
+                    "description": "Specify the allowed Application Gateway SKUs",
                     "displayName": "Application Gateway: Allowed SKUs"
                 }
             }

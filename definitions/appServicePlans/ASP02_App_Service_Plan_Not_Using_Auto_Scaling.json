@@ -1,0 +1,71 @@
+{
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "name": "ASP02_App_Service_Plan_Not_Using_Auto_Scaling",
+    "mode": "All",
+    "properties": {
+        "description": "Highlights when App Service Plans support auto-scaling but don't have it configured. Auto-scaling reduces costs during low-traffic periods by scaling down instances.",
+        "metadata": {
+            "category": "Cost Comply"
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Web/serverfarms"
+                    },
+                    {
+                        "field": "Microsoft.Web/serverfarms/sku.tier",
+                        "in": [
+                            "Standard",
+                            "PremiumV2",
+                            "PremiumV3",
+                            "Premium",
+                            "Isolated",
+                            "IsolatedV2",
+                            "ElasticPremium"
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]",
+                "details": {
+                    "type": "Microsoft.Insights/autoscaleSettings",
+                    "existenceCondition": {
+                        "allOf": [
+                            {
+                                "field": "Microsoft.Insights/autoscaleSettings/enabled",
+                                "equals": "true"
+                            },
+                            {
+                                "field": "Microsoft.Insights/autoscaleSettings/targetResourceUri",
+                                "contains": "[field('id')]"
+                            },
+                            {
+                                "count": {
+                                    "field": "Microsoft.Insights/autoscaleSettings/profiles[*]"
+                                },
+                                "greater": 0
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "allowedValues": [
+                    "AuditIfNotExists",
+                    "Disabled"
+                ],
+                "defaultValue": "AuditIfNotExists",
+                "metadata": {
+                    "description": "Specify the effect of the policy. Options are AuditIfNotExists or Disabled.",
+                    "displayName": "Effect"
+                }
+            }
+        }
+    }
+}

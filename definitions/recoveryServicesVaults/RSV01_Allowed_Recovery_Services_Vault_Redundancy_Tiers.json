@@ -16,7 +16,7 @@
                     },
                     {
                         "field": "Microsoft.RecoveryServices/vaults/redundancySettings.standardTierStorageRedundancy",
-                        "notIn": "[parameters('RecoveryServicesRedundancy')]"
+                        "notIn": "[parameters('AllowedVaultRedundancyTiers')]"
                     }
                 ]
             },
@@ -25,7 +25,7 @@
             }
         },
         "parameters": {
-            "RecoveryServicesRedundancy": {
+            "AllowedVaultRedundancyTiers": {
                 "type": "Array",
                 "metadata": {
                     "displayName": "Recovery Services Vault: Allowed Redundancy Tiers",
